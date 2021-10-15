@@ -49,6 +49,14 @@ public class @PlayerInputs : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""Camera"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""ebfd5876-0c20-4a2b-acf7-73d59266ad9c"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -95,6 +103,28 @@ public class @PlayerInputs : IInputActionCollection, IDisposable
                     ""action"": ""Attack"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e272e59e-9a27-40d6-85bc-cd45c10957c7"",
+                    ""path"": ""<Mouse>/delta"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Camera"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1d63f3cb-02d3-4160-8175-ef2dc1bfd1da"",
+                    ""path"": ""<Gamepad>/rightStick"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Camera"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -107,6 +137,7 @@ public class @PlayerInputs : IInputActionCollection, IDisposable
         m_Gameplay_Jump = m_Gameplay.FindAction("Jump", throwIfNotFound: true);
         m_Gameplay_Attack = m_Gameplay.FindAction("Attack", throwIfNotFound: true);
         m_Gameplay_Pause = m_Gameplay.FindAction("Pause", throwIfNotFound: true);
+        m_Gameplay_Camera = m_Gameplay.FindAction("Camera", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -160,6 +191,7 @@ public class @PlayerInputs : IInputActionCollection, IDisposable
     private readonly InputAction m_Gameplay_Jump;
     private readonly InputAction m_Gameplay_Attack;
     private readonly InputAction m_Gameplay_Pause;
+    private readonly InputAction m_Gameplay_Camera;
     public struct GameplayActions
     {
         private @PlayerInputs m_Wrapper;
@@ -168,6 +200,7 @@ public class @PlayerInputs : IInputActionCollection, IDisposable
         public InputAction @Jump => m_Wrapper.m_Gameplay_Jump;
         public InputAction @Attack => m_Wrapper.m_Gameplay_Attack;
         public InputAction @Pause => m_Wrapper.m_Gameplay_Pause;
+        public InputAction @Camera => m_Wrapper.m_Gameplay_Camera;
         public InputActionMap Get() { return m_Wrapper.m_Gameplay; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -189,6 +222,9 @@ public class @PlayerInputs : IInputActionCollection, IDisposable
                 @Pause.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnPause;
                 @Pause.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnPause;
                 @Pause.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnPause;
+                @Camera.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnCamera;
+                @Camera.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnCamera;
+                @Camera.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnCamera;
             }
             m_Wrapper.m_GameplayActionsCallbackInterface = instance;
             if (instance != null)
@@ -205,6 +241,9 @@ public class @PlayerInputs : IInputActionCollection, IDisposable
                 @Pause.started += instance.OnPause;
                 @Pause.performed += instance.OnPause;
                 @Pause.canceled += instance.OnPause;
+                @Camera.started += instance.OnCamera;
+                @Camera.performed += instance.OnCamera;
+                @Camera.canceled += instance.OnCamera;
             }
         }
     }
@@ -215,5 +254,6 @@ public class @PlayerInputs : IInputActionCollection, IDisposable
         void OnJump(InputAction.CallbackContext context);
         void OnAttack(InputAction.CallbackContext context);
         void OnPause(InputAction.CallbackContext context);
+        void OnCamera(InputAction.CallbackContext context);
     }
 }
