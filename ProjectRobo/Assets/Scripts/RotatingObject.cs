@@ -13,7 +13,8 @@ public class RotatingObject : MonoBehaviour
     [Header("Rotation Config")]
     public bool allowSpin;
     public RotationDirection direction;
-    public float spinSpeed;
+    public Vector3 eulerAngleVelocity;
+    public Rigidbody rb;
 
     Vector3 newRotation;
     float rotationToAdd;
@@ -23,14 +24,15 @@ public class RotatingObject : MonoBehaviour
     {
         if (allowSpin)
         {
-            rotationToAdd = spinSpeed * Time.deltaTime;
+            //rotationToAdd = spinSpeed * Time.deltaTime;
 
-            if (direction == RotationDirection.Clockwise) 
-                newRotation.y += rotationToAdd;
-            else
-                newRotation.y -= rotationToAdd;
+            //if (direction == RotationDirection.Clockwise) 
+            //    newRotation.y += rotationToAdd;
+            //else
+            //    newRotation.y -= rotationToAdd;
 
-            transform.eulerAngles = newRotation;
+            Quaternion deltaRotation = Quaternion.Euler(eulerAngleVelocity * Time.fixedDeltaTime);
+            rb.MoveRotation(rb.rotation * deltaRotation);
         }
     }
 }
